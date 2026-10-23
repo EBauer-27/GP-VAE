@@ -145,13 +145,17 @@ def main(argv):
     # Load data #
     #############
 
+
     data = np.load(FLAGS.data_dir)
+
+    ## TRAINING
     x_train_full = data['x_train_full']
     x_train_miss = data['x_train_miss']
     m_train_miss = data['m_train_miss']
     if FLAGS.data_type in ['hmnist', 'physionet']:
         y_train = data['y_train']
 
+    ## TESTING
     if FLAGS.testing:
         if FLAGS.data_type in ['hmnist', 'sprites']:
             x_val_full = data['x_test_full']
@@ -159,28 +163,45 @@ def main(argv):
             m_val_miss = data['m_test_miss']
         if FLAGS.data_type == 'hmnist':
             y_val = data['y_test']
+
+        # original gitrepo uses the train data as validation 
+        #elif FLAGS.data_type == 'physionet':
+        #    x_val_full = data['x_train_full']
+        #    x_val_miss = data['x_train_miss']
+        #    m_val_miss = data['m_train_miss']
+        #    y_val = data['y_train']
+        #    m_val_artificial = data["m_train_artificial"]
+
+        # changed to the available test dataset
         elif FLAGS.data_type == 'physionet':
-            x_val_full = data['x_train_full']
-            x_val_miss = data['x_train_miss']
-            m_val_miss = data['m_train_miss']
-            y_val = data['y_train']
-            m_val_artificial = data["m_train_artificial"]
+                    x_val_full = data['x_test_full']
+                    x_val_miss = data['x_test_miss']
+                    m_val_miss = data['m_test_miss']
+                    y_val = data['y_test']
+                    m_val_artificial = data["m_test_artificial"]
+
+    ## VALIDATION
+    # hmnist and sprites only have train and test -> validation dataset from training set
     elif FLAGS.data_type in ['hmnist', 'sprites']:
         x_val_full = x_train_full[val_split:]
         x_val_miss = x_train_miss[val_split:]
         m_val_miss = m_train_miss[val_split:]
         if FLAGS.data_type == 'hmnist':
             y_val = y_train[val_split:]
+
+        # TRAINING (hmnist & sprites)
         x_train_full = x_train_full[:val_split]
         x_train_miss = x_train_miss[:val_split]
         m_train_miss = m_train_miss[:val_split]
         y_train = y_train[:val_split]
+
     elif FLAGS.data_type == 'physionet':
         x_val_full = data["x_val_full"]  # full for artificial missings
         x_val_miss = data["x_val_miss"]
         m_val_miss = data["m_val_miss"]
         m_val_artificial = data["m_val_artificial"]
         y_val = data["y_val"]
+
     else:
         raise ValueError("Data type must be one of ['hmnist', 'physionet', 'sprites']")
 
