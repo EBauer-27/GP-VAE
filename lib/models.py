@@ -391,8 +391,7 @@ class GP_VAE(HI_VAE):
             # depatched??
             self.prior = tfd.MultivariateNormalTriL(
                 loc=tf.zeros([self.latent_dim, self.time_length], dtype=tf.float32),
-                covariance_matrix=kernel_matrix_tiled,
-                scale_tril=tf.linalg.cholesky(K))
+                scale_tril=tf.linalg.cholesky(kernel_matrix_tiled))
         return self.prior
 
     def kl_divergence(self, a, b):
