@@ -389,9 +389,10 @@ class GP_VAE(HI_VAE):
             assert len(kernel_matrix_tiled) == self.latent_dim
 
             # depatched??
-            self.prior = tfd.MultivariateNormalFullCovariance(
+            self.prior = tfd.MultivariateNormalTriL(
                 loc=tf.zeros([self.latent_dim, self.time_length], dtype=tf.float32),
-                covariance_matrix=kernel_matrix_tiled)
+                covariance_matrix=kernel_matrix_tiled,
+                scale_tril=tf.linalg.cholesky(K))
         return self.prior
 
     def kl_divergence(self, a, b):
