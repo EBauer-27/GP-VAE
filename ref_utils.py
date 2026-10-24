@@ -107,12 +107,12 @@ def elbo_parts(model, x, m_mask, eps):
     px_z = model.decode(z)
  
     nll = -px_z.log_prob(x)
-    nll = tf.where(tf.math.is_finite(nll), nll, tf.zeros_like(nll))
-    nll = tf.where(m_mask, tf.zeros_like(nll), nll)
+    nll = tf.compat.v1.where(tf.math.is_finite(nll), nll, tf.zeros_like(nll))
+    nll = tf.compat.v1.where(m_mask, tf.zeros_like(nll), nll)
     nll = tf.reduce_sum(nll, [1, 2])
  
     kl = model.kl_divergence(qz_x, pz)
-    kl = tf.where(tf.math.is_finite(kl), kl, tf.zeros_like(kl))
+    kl = tf.compat.v1.where(tf.math.is_finite(kl), kl, tf.zeros_like(kl))
     kl = tf.reduce_sum(kl, 1)
  
     elbo = -nll - model.beta * kl

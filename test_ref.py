@@ -11,8 +11,6 @@ import ref_utils as ult
 import lib.models as models
 import tensorflow as tf
 
-if tf.__version__.startswith("1."):      
-    tf.compat.v1.enable_eager_execution()
 
 REF_DIR = os.path.join(os.getcwd(), "reference")
 
