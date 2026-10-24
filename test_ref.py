@@ -12,10 +12,10 @@ import ref_utils as ult
 import lib.models as models
 import tensorflow as tf
 
-if tf.__version__.startswith("1."):      
-    tf.compat.v1.enable_eager_execution()
+#if tf.__version__.startswith("1."):      
+#    tf.compat.v1.enable_eager_execution()
 
-tf.v1.disable_v2_behavior()
+#tf.v1.disable_v2_behavior()
 
 REF_DIR = os.path.join(os.getcwd(), "reference")
 
